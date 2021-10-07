@@ -5,7 +5,7 @@ L'assurance pourrait se décliner sous plusieurs contrat:
       - vol annulé, dédommagement à haute de 70% - 100%
       - vol retardé, dédommagement à hauteur de 10% - 20%
 
-### 1. L'application web
+# 1. L'application web
 
 ## 1.1 Le front
 Pour ce projet, je choisis d'utiliser du React pour faire une page Web permettant de réserver un vol à partir d'un wallet Web3 type Metamask.
@@ -20,7 +20,7 @@ Par besoin de simplicité pour les tests, les vols seront donc des dummy datas, 
 ## 1.3 L'API
 La base de données disposera d'une API permettant de fournir à son appelant, toutes les infos relatifs à un vol à partir de son numéro de vol.
 
-### 2. L'application décentralisée
+# 2. L'application décentralisée
 
 ## 2.1 Un billet, sout forme d'NFT
 Lorsque l'achat du billet par le wallet sera effectué, l'application donnera au wallet en échange, un token NFT du standard ERC 1155.
