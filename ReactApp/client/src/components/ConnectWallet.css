@@ -1,0 +1,7 @@
+.ConnectButton {
+    color: white;
+    border: unset;
+    background-color: #1f5156;
+    font-size: inherit;
+    cursor: pointer;
+}
