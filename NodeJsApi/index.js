@@ -1,19 +1,22 @@
 
 //Create express APP
-const EXPRESS = require('express')
-const APP = EXPRESS()
+const express = require('express')
+const app = express()
 var db = require("./database.js")
 
 //Server PORT
 const HTTP_PORT = 8080
 
+//Allow CORS
+const cors = require('cors')
+app.use(cors())
 //Start server
-APP.listen(HTTP_PORT, () => {
+app.listen(HTTP_PORT, () => {
     console.log("Server running on port %PORT%".replace("%PORT%", HTTP_PORT))
 })
 
 //ENDPOINTS
-APP.get("/api/flights", (req, res, next) => {
+app.get("/api/flights", (req, res) => {
     var sql = "select * from Flight"
     var params = []
     db.all(sql, params, (err, rows) => {
@@ -21,31 +24,27 @@ APP.get("/api/flights", (req, res, next) => {
             res.status(400).json({"error":err.message});
             return;
         }
-        res.json({
-            "message":"succes",
-            "data":rows
-        })
+        res.json({"data":rows})
     })
 })
 
-APP.get("/api/flight:num", (req, res, next) => {
-    var sql = "select * from Flight WHERE num = ?"
-    var params = [req.params.num]
-
-    db.get(sql, params, (err, row) => {
+app.get("/api/flights/:num", (req, res) => {
+    var sql = "select * from Flight WHERE num = " + "\'" + req.params.num.replace(":","") + "\'"
+    console.log(sql)
+    db.get(sql, (err, row) => {
         if (err) {
             res.status(400).json({"error":err.message});
             return;
         }
-        res.json({
-            "message":"success",
-            "data":row
-        })
+        res.json({"data":row})
     })
 })
 
 //Default response for any other request
-APP.use(function(req, res){
+app.use(function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");   
+    res.header("Content-Type", "application/json");
     res.status(404);
 })
 

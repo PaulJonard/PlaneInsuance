@@ -2,10 +2,9 @@ import {useWallet, UseWalletProvider} from 'use-wallet'
 import React from 'react'
 
 import "./ConnectWallet.css"
-
-
+let wallet;
 function ButtonBehaviour() {    
-    const wallet = useWallet()
+    wallet = useWallet()
     let content = "Connect Wallet"
     const connectWallet = async (e) => {        
         e.preventDefault()
@@ -19,7 +18,6 @@ function ButtonBehaviour() {
         }    
     }
 
-
     return (
         <div>
             <button 
@@ -30,12 +28,17 @@ function ButtonBehaviour() {
     )
 }
 
+export function isConnected(){    
+    return wallet.status
+}
+
+
 function Connection() {
     return (
         <UseWalletProvider 
         chainId={4}
         connectors={{
-            provided: {provider: window.cleanEthereum}
+            provided: {provider: window.ethereum}
         }}
         >
             <ButtonBehaviour />
