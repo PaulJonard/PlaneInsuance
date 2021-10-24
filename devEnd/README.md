@@ -1,6 +1,7 @@
-# Basic Sample Hardhat Project
+# HardHat basic commands
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Hardhat is used to deploy on a local copy of ethereum blockchain, cleaned up at each start. Or deploying to a testnet.
+Hardhat provide some commands to retrieve deployer accounts, compiling infos...
 
 Try running some of the following tasks:
 
@@ -8,8 +9,8 @@ Try running some of the following tasks:
 npx hardhat accounts
 npx hardhat compile
 npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
+npx hardhat run scripts/run.js    --to debug the smartContract
+npx hardhat run scripts/deploy.js --network rinkeby  --to deploy on testnet
+npx hardhat run scripts/deploy.js --network localhost  --to deploy on localhost
 npx hardhat help
 ```
