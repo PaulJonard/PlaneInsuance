@@ -2,7 +2,7 @@ import React from 'react'
 
 function Flight2({flightData}){
     return (
-        <h1>{flightData.name}</h1>
+        <h1>{flightData.num}</h1>
     )    
 }    
 

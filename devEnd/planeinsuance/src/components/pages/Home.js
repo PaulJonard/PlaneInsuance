@@ -1,18 +1,19 @@
 import React from "react";
 import './Home.css';
-import metamaskLogo from './../../misc/metamask.png'
-import ethFaucet from './../../misc/ethFauchet.jpeg'
+import './Ether.css'
 
 export const Home = () => {
+
+
   return (
-    <div>
+    <div className="bg">      
         <div className="section cc-store-home-wrap">
           <div className="intro-header">
             <div className="intro-content cc-homepage">
               <div className="intro-text">
                 <div className="heading">Plane insuance</div>
                 <div className="paragraphe-bigger cc-bigger-white-light">
-                  "Une application de réservation de vol, couplée à une assurance décentralisée pour des remboursements sans contraintes, rapide et sûr"
+                  Une application de réservation de vol, couplée à une assurance décentralisée pour des remboursements sans contraintes, rapide et sûr
                   <br/>
                 </div>
               </div>
@@ -22,7 +23,11 @@ export const Home = () => {
             <div className="motto-wrap">
               <div className="label cc-light">Getting started</div>
               <div className="heading-small">
-                " zzzzzz"
+                Nous allons voir étape par étape, comment utiliser l'application.<br/><br/>
+                De la création d'un wallet Web3<br/>
+                En passant par l'achat d'un billet<br/>
+                Et en terminant par un remboursement si nécessaire!<br/><br/>
+                Votre aventure dans le nouveau web, commence ici!<br/>
                 <br/>
               </div>
             </div>
@@ -34,33 +39,81 @@ export const Home = () => {
                     <div className="label cc-light">How to use</div>
                     <h2 className="section-heading">Config Metamask</h2>
                     <p className="paragraphe-light">
-                      Metamask est un portefeuille multicomptes qui vie au sein de votre navigateur.
-                      Il est le point d'entrée pour un nouveau web, un web décentralisée, le Web3.
+                      Metamask est un portefeuille multicomptes qui vie au sein de votre navigateur.<br/>
+                      Il est le point d'entrée pour un nouveau web, un web décentralisée, le Web3.<br/>
                       Il supporte toutes les blockchains et tokens existants, il sera nécessaire pour accéder à notre site.
                     </p>
                   </div>
-                  <a href="https://metamask.io/" className="button w-inline-block">
+                  <a href="https://metamask.io/" className="button w-inline-block" target="_blank" rel="noreferrer">
                     <div>Install Metamask</div>
                   </a>
                 </div>
-                <img src={metamaskLogo} id="w-node-1"></img>
+                <div id="mydiv" >
+                  <iframe title="metamask3DLogo" id="myframe"
+                    src="https://metamask.github.io/logo/recolor/index.html"
+                    height="1000px"
+                    width="1000px"
+                    scrolling="no">          
+                  </iframe>
+                </div>
               </div>
               <div className="w-layout-grid about-grid cc-about-2">
+                <div id="space">
+                    <div class="elogo">
+                          <div class="trif u1"></div>
+                          <div class="trif u2"></div>
+                          <div class="trif u3"></div>
+                          <div class="trif u4"></div>
+                          <div class="ct"></div>
+                          <div class="trif l1"></div>
+                          <div class="trif l4"></div>
+                      </div>
+                    <h1>ethereum</h1>
+                  </div>                
                 <div id="w-node-2">
                   <div className="home-section-wrap">
                     <div className="label cc-light">Get some ETH</div>
                     <h2 className="section-heading">The Faucet</h2>
                     <p className="paragraphe-light">
-                      Notre application vie au sein du réseau Rinkeby, c'est un réseau de test du réseau principal Ethereum.
-                      Pour payer vos billets, et les frais de blockchain, du token ETH vous sera nécessaire.
+                      Notre application vie au sein du réseau Rinkeby, c'est un réseau de test du réseau principal Ethereum.<br/>
+                      Pour payer vos billets, et les frais de blockchain, du token ETH vous sera nécessaire.<br/>
                       Sur Rinkeby, nous utilisons du faux ETH, vous pouvez en obtenir via un Faucet.
                     </p>
-                  </div>
-                  <a href="https://faucet.rinkeby.io/" className="button w-inline-block">
-                    <div>Give me my ETH!!</div>
+                  </div>  
+                  <a href="https://faucet.rinkeby.io/" className="button w-inline-block" target="_blank" rel="noreferrer">
+                    <div>Give me my ETH  !!!</div>
                   </a>
                 </div>
-                <img src={ethFaucet} id="w-node-2"></img>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="section">
+          <div className="container">
+            <div className="blog-heading">
+              <div className="label cc-light">About Us</div>
+              <h2 className="work-heading">Company news</h2>
+            </div>
+            <div className="collection-list-wrapper">
+              <div role="list" className="collection-wrap">
+                <div role="listitem" className="blog-preview-wrap">
+                  <span className="business-article-heading">Réservez un vol !</span>
+                  <p className="paragraphe-light">
+                    Bla bla bla A venir
+                  </p>
+                </div>
+                <div role="listitem" className="blog-preview-wrap">
+                  <span className="business-article-heading">Un billet sous forme de NFT !</span>
+                  <p className="paragraphe-light">
+                    Bla bla bla A venir
+                  </p>
+                </div>
+                <div role="listitem" className="blog-preview-wrap">
+                  <span className="business-article-heading">Faites marcher l'assurance !</span>
+                  <p className="paragraphe-light">
+                    Bla bla bla A venir
+                  </p>
+                </div>
               </div>
             </div>
           </div>

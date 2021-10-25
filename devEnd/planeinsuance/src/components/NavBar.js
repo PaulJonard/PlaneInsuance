@@ -5,10 +5,10 @@ import "./NavBar.css";
 const NavBar = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const click = useState(false);
-
+  
   const connectWallet = async () => {
     try{
-      const { ethereum } = window;
+      const { ethereum} = window
       if(!ethereum){
         alert("Get Metamask!")
         return;
@@ -23,9 +23,8 @@ const NavBar = () => {
   }
 
   const checkIfWalletIsConnected = async () => {
-    try {
-      const { ethereum } = window;
-
+    try {      
+      const { ethereum} = window
       if (!ethereum) {
         console.log("Make sure you have metamask!");        
         return;
@@ -71,6 +70,7 @@ const NavBar = () => {
           </li>
           <li className="nav-item">
             <NavLink
+              hidden={!currentAccount}
               exact
               to= "/AvailableFlights"
               activeClassName= "active"
@@ -82,6 +82,7 @@ const NavBar = () => {
           
           <li className="nav-item">
             <NavLink
+              hidden={!currentAccount}
               exact
               to= "/MyFlights"
               activeClassName= "active"
@@ -91,11 +92,12 @@ const NavBar = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            {!currentAccount && (
+            {!currentAccount ?               
               <button className="connectButton" onClick={connectWallet}>
                 Connect Wallet
               </button>
-            )}
+              :
+              <span className="address">{currentAccount}</span>}
           </li>
         </ul>
       </div>

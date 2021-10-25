@@ -1,20 +1,24 @@
+.bg{
+    background-color: rgb(34, 34, 34);
+    width:100%;
+    padding-left:10%;
+}
+
 .section{
     margin-right: 30px;
-    margin-left: 30px;
+    margin-left: 30px;    
+    width: 1440px;
 }
 
 .intro-header{
     display: flex;
-    height: 620px;
+    height: 600px;
     margin-bottom: 100px;
     justify-content: center;
     -webkit-box-align: center;
     align-items: center;
-    background-color: #f4f4f4;
-    background-image: url(../../misc/HomePage_Header.svg);
-    background-position: 0px 0px;
-    background-size: cover;
-    color: #fff;
+    background-image: url(../../misc/etherColoredBackground.png);
+ 
 }
 
 .container{
@@ -33,12 +37,24 @@
 }
 
 .heading-small{
+    background: linear-gradient(to right,    #b09ce4 0% 1em,
+                                             #bca4f1 15% 1.15em,
+                                             #cab3f4 30% 1.3em,
+                                             #cdb1c3 45% 1.45em,
+                                             #f2cec4 60% 1.6em,
+                                             #9fc2b0 75% 1.75em,
+                                             #b2f3f3 1.9em 100% );
+                                             
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin-top: 10px;
     margin-bottom: 15px;
     font-size: 36px;
     line-height: 50px;
     font-weight: 400;
     text-transform: none;
+    
 }
 
 .divider{
@@ -66,20 +82,20 @@
 .heading{
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: 64px;
+    font-size: 110px;
     line-height: 80px;
     text-transform: none;
 }
 
 .paragraphe-bigger{
     margin-bottom: 10px;
-    font-size: 20px;
-    line-height: 34px;
+    font-size: 40px;
+    line-height: 40px;
     font-weight: 400;
 }
 
 .paragraphe-bigger.cc-bigger-white-light{
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 
@@ -142,10 +158,12 @@
     font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;
+    color: #f2f2f2;
 }
 
 .label.cc-light{
     opacity: 0.6;
+    color: #f2f2f2;
 }
 
 .seciont-heading{
@@ -161,9 +179,82 @@ h2{
 
 .paragraphe-light{
     opacity: 0.6;
+    color: #f2f2f2;
+    font-size: large;
 }
 
 p{
     margin-bottom: 10px;
     margin-top: 0;
+}
+
+
+
+
+.blog-heading{
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.work-heading{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.collection-list-wrapper{
+    margin-bottom: 120px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.collection-wrap{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+*{
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.blog-preview-wrap{
+    width: 33.33%;
+    padding-right: 45px;
+    padding-bottom: 30px;
+    padding-left: 15px;
+}
+
+.business-article-heading{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    line-height: 38px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+#mydiv{    
+    position:relative;
+    overflow:hidden;
+    height:520px;
+    width:550px;
+    border-style: none;
+    
+}
+#myframe{
+    position:absolute;
+    top:100px;
+    left:100px;
+    border-style: none;
 }

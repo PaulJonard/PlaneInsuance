@@ -1,0 +1,63 @@
+.container-flight{
+    width: 80%;
+    vertical-align: middle;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-radius: .625rem;
+    background-color: #292929;
+    margin: 0 auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.sub-container{
+    background-color: green;
+    display: 1;
+    margin: 5px;
+}
+
+#infos{
+    width: 80%;
+}
+#buy{
+    width: 20%;
+    text-align: center;
+}
+
+.span-text{
+    font-size: .875rem;
+    font: "Roboto";
+    line-height: 1.25rem;
+        --font-sans: "DM Sans",
+        -apple-system,system-ui,
+        -apple-system,Segoe UI,
+        Roboto,Ubuntu,Cantarell,
+        Noto Sans,sans-serif,
+        BlinkMacSystemFont,"Helvetica Neue",
+        "Helvetica",sans-serif;
+}
+
+.button-buy{
+    padding: 12px 25px;
+    border-radius: 0px;
+    background-color: #1a1b1f;
+    transition: background-color 400ms ease, opacity 400ms ease, color 400ms ease;
+    transition-property: background-color, opacity, color;
+    transition-duration: 400ms, 400ms, 400ms;
+    transition-timing-function: ease, ease, ease;
+    transition-delay: 0s, 0s, 0s;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.dividerz{
+    width: 1px;
+    background-color: #eee;
+}
