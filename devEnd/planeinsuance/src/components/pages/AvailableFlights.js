@@ -3,6 +3,8 @@ import React, {Component} from "react";
 import FlightsList from './../FlightsDisplaying/FlightsList.js'
 import Flight from './../FlightsDisplaying/Flight.js'
 
+import './AvailableFlights.css'
+
 class AvailableFlights extends Component {
   state = {
     data: []
@@ -20,16 +22,13 @@ class AvailableFlights extends Component {
       return response.json()
     })
     .then((result) => {
-      setTimeout(() => {
-        this.setState(result)
-      }, (1500));
-      
+        this.setState(result)      
     })
   }
 
   render() {
     return (
-      <div>{(this.state.data[0]) ? <FlightsList component={this.state.data.map(_flight => <Flight flightData={_flight}/>)}/>  : <h1>Chargement...</h1>}</div>
+      <div className="bg-af">{(this.state.data[0]) ? <FlightsList component={this.state.data.map(_flight => <Flight flightData={_flight}/>)}/>  : <h1>Chargement...</h1>}</div>
     )
   }
 }

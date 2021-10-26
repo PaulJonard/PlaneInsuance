@@ -6,7 +6,7 @@
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     border-radius: .625rem;
-    background-color: #292929;
+    background-color: #292929;    
     margin: 0 auto;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -14,30 +14,63 @@
 }
 
 .sub-container{
-    background-color: green;
     display: 1;
-    margin: 5px;
 }
 
 #infos{
     width: 80%;
+    display: flex;
 }
 #buy{
     width: 20%;
     text-align: center;
+    border: 2px solid;
+    border-image-source: linear-gradient(to right, #b09ce4 0% 1em,
+                                                   #bca4f1 15% 1.15em,
+                                                   #cab3f4 30% 1.3em,
+                                                   #cdb1c3 45% 1.45em,
+                                                   #f2cec4 60% 1.6em,
+                                                   #9fc2b0 75% 1.75em,
+                                                   #b2f3f3 1.9em 100% );
+    border-image-slice: 1;
+}
+
+#departure{
+    width: 50%;
+    display: 1;
+    margin: 5px;
+    border: 2px solid;
+    border-image-source: linear-gradient(to right, #b09ce4 0% 1em,
+                                                   #bca4f1 15% 1.15em,
+                                                   #cab3f4 30% 1.3em,
+                                                   #cdb1c3 45% 1.45em,
+                                                   #f2cec4 60% 1.6em,
+                                                   #9fc2b0 75% 1.75em,
+                                                   #b2f3f3 1.9em 100% );
+    border-image-slice: 1;
+}
+#destination{
+    width: 50%;
+    display: 1;
+    margin: 5px;
+    border: 2px solid;
+    border-image-source: linear-gradient(to right, #b09ce4 0% 1em,
+                                                   #bca4f1 15% 1.15em,
+                                                   #cab3f4 30% 1.3em,
+                                                   #cdb1c3 45% 1.45em,
+                                                   #f2cec4 60% 1.6em,
+                                                   #9fc2b0 75% 1.75em,
+                                                   #b2f3f3 1.9em 100% );
+    border-image-slice: 1;
 }
 
 .span-text{
-    font-size: .875rem;
-    font: "Roboto";
-    line-height: 1.25rem;
-        --font-sans: "DM Sans",
-        -apple-system,system-ui,
-        -apple-system,Segoe UI,
-        Roboto,Ubuntu,Cantarell,
-        Noto Sans,sans-serif,
-        BlinkMacSystemFont,"Helvetica Neue",
-        "Helvetica",sans-serif;
+    padding-left: 10px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+    color: #FFF1F1;        
+    margin-bottom: 15px;
 }
 
 .button-buy{
@@ -55,9 +88,5 @@
     letter-spacing: 2px;
     text-decoration: none;
     text-transform: uppercase;
-}
-
-.dividerz{
-    width: 1px;
-    background-color: #eee;
+    padding-bottom: 5px;
 }

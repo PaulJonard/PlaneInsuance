@@ -1,9 +1,10 @@
 import React from 'react'
+import './FlightsList.css'
 
 function FlightsList({component}){
 
     return (
-        <div>{component}</div>
+        <div className="list-item">{component}</div>
     )    
 }    
 
