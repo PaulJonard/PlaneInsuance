@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import './Home.css';
-import './Ether.css'
+import './Ether.css';
+import MetamaskLogo from "../../utils/MetamaskLogo";
 
-export const Home = () => {
-
-
-  return (
+const Home = () =>{
+ 
+  return (    
     <div className="bg">      
         <div className="section cc-store-home-wrap">
           <div className="intro-header">
@@ -48,25 +48,18 @@ export const Home = () => {
                     <div>Install Metamask</div>
                   </a>
                 </div>
-                <div id="mydiv" >
-                  <iframe title="metamask3DLogo" id="myframe"
-                    src="https://metamask.github.io/logo/recolor/index.html"
-                    height="1000px"
-                    width="1000px"
-                    scrolling="no">          
-                  </iframe>
-                </div>
+                <MetamaskLogo/>
               </div>
               <div className="w-layout-grid about-grid cc-about-2">
                 <div id="space">
-                    <div class="elogo">
-                          <div class="trif u1"></div>
-                          <div class="trif u2"></div>
-                          <div class="trif u3"></div>
-                          <div class="trif u4"></div>
-                          <div class="ct"></div>
-                          <div class="trif l1"></div>
-                          <div class="trif l4"></div>
+                    <div className="elogo">
+                          <div className="trif u1"></div>
+                          <div className="trif u2"></div>
+                          <div className="trif u3"></div>
+                          <div className="trif u4"></div>
+                          <div className="ct"></div>
+                          <div className="trif l1"></div>
+                          <div className="trif l4"></div>
                       </div>
                     <h1>ethereum</h1>
                   </div>                
@@ -119,5 +112,7 @@ export const Home = () => {
           </div>
         </div>
     </div>
-  );
+  )  
 };
+
+export default Home;

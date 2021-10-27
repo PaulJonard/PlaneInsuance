@@ -1,7 +1,7 @@
 import './App.css';
 import NavBar from './components/NavBar';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Home } from './components/pages/Home';
+import Home  from './components/pages/Home';
 import AvailableFlights from './components/pages/AvailableFlights';
 import { MyFlights } from './components/pages/MyFlights';
 

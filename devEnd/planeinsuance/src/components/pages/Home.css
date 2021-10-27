@@ -125,6 +125,11 @@
     grid-auto-columns: 2fr 1fr;
 }
 
+.logo-container{
+    height: 500px;
+    width: 500px;
+}
+
 .button{
     padding: 12px 25px;
     border-radius: 0px;
