@@ -3,8 +3,7 @@ import './Home.css';
 import './Ether.css';
 import MetamaskLogo from "../../utils/MetamaskLogo";
 
-const Home = () =>{
- 
+const Home = () =>{ 
   return (    
     <div className="bg">      
         <div className="section cc-store-home-wrap">
