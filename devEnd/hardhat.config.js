@@ -20,8 +20,8 @@ module.exports = {
   solidity: "0.8.0",
   networks:{
     rinkeby:{
-      url:'alchemyapiURL',
-      accounts: ['metamaskPrivateKey']
+      url:'https://eth-rinkeby.alchemyapi.io/v2/fp66M4mtx0SIMdw12rL2onIKaft1xfpX',
+      accounts: ['88a77c8ca2092603aa7d1eeda4b0c4bd83d2c72eb1b113b750f101be6d8139d7']
     }
   }
 };
