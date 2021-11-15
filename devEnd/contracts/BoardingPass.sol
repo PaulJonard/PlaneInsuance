@@ -22,35 +22,37 @@ contract BoardingPass is ERC721, Ownable{
     //URIs mapping  tokenId to uri datas
     mapping(uint => string) private _uris;
 
-    string private _baseURIextended;
+    string private _baseURIextended = "https://ipfs.io/";
 
     constructor() ERC721("PlaneHub Token", "PHT"){}
     
     
     //=========================
+    function ethToWei(uint256 ethPrice) internal pure returns(uint256){
+        return ethPrice**18;
+    }
     
-    function setBaseURI(string memory baseURI) external onlyOwner{
-        _baseURIextended = baseURI;
+    //=========================
+    
+    function mint(address _to, string memory _tokenURI, uint256 price) public virtual payable{
+        require(msg.value >= ethToWei(price), "Not enough Ether");
+        _tokenIdCounter.increment();
+        _safeMint(_to, _tokenIdCounter.current());
+        _setTokenURI(_tokenIdCounter.current(), _tokenURI);
+        _tokenHolders[msg.sender].push(_tokenIdCounter.current());
     }
     
     function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual
     {
         require(_exists(tokenId), "ERC721Metadata : URI set of nonexistent token");
-        _uris[tokenId] = _tokenURI;
+        _uris[tokenId] = string(abi.encodePacked(_baseURIextended, _tokenURI));
     }
     
-    function mint(address _to, string memory _tokenURI) public payable{
-        require(msg.value == 1, "Not enough Ether");
-        _tokenIdCounter.increment();
-        _uris[_tokenIdCounter.current()] = _tokenURI;
-        _safeMint(_to, _tokenIdCounter.current());
-        
-        _tokenHolders[msg.sender].push(_tokenIdCounter.current());
-    }
-    
-    
-    function getTokenURI(uint256 tokenId) private view returns (string memory){
+    function getTokenURI(uint256 tokenId) public view returns (string memory){
         return _uris[tokenId];
     }
-
+    
+    function getAllTokensFromAdress(address _from) public view returns(uint256[] memory){
+        return _tokenHolders[_from];
+    }
 }
