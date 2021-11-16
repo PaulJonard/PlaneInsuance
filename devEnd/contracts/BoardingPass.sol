@@ -22,7 +22,7 @@ contract BoardingPass is ERC721, Ownable{
     //URIs mapping  tokenId to uri datas
     mapping(uint => string) private _uris;
 
-    string private _baseURIextended = "https://ipfs.io/";
+    string private _baseURIextended = "";
 
     constructor() ERC721("PlaneHub Token", "PHT"){}
     

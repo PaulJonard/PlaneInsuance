@@ -9,20 +9,35 @@ class AvailableFlights extends Component {
   state = {
     data: []
   }
-
   componentDidMount(){
-    fetch('http://localhost:8080/api/flights',
+    let ethPrice = 0
+    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=ethereum',
     {
-      headers: 
-        { 
-          'Content-Type': 'application/json' 
-        }
+      headers:
+      {
+          'Content-Type': 'application/json'
+      }
     })
     .then((response) => {
       return response.json()
     })
     .then((result) => {
-        this.setState(result)      
+        ethPrice = result[0].current_price
+
+      fetch('http://localhost:8080/api/flights',
+      {
+        headers: 
+        { 
+          'Content-Type': 'application/json' 
+        }
+      })
+      .then((response) => {
+        return response.json()
+      })
+      .then((result) => {
+        result.data.map(row => row.ethPrice = (row.price / ethPrice).toPrecision(2))
+        this.setState(result)
+      })
     })
   }
 
