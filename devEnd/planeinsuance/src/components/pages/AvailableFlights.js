@@ -15,14 +15,14 @@ class AvailableFlights extends Component {
     {
       headers:
       {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       }
     })
     .then((response) => {
       return response.json()
     })
     .then((result) => {
-        ethPrice = result[0].current_price
+      ethPrice = result[0].current_price
 
       fetch('http://localhost:8080/api/flights',
       {

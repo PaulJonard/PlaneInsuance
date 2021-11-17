@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
 contract BoardingPass is ERC721, Ownable{
-    
+ 
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
     
@@ -22,7 +22,7 @@ contract BoardingPass is ERC721, Ownable{
     //URIs mapping  tokenId to uri datas
     mapping(uint => string) private _uris;
 
-    string private _baseURIextended = "";
+    string private _baseURIextended = "https://gateway.pinata.cloud/ipfs/";
 
     constructor() ERC721("PlaneHub Token", "PHT"){}
     
@@ -30,14 +30,13 @@ contract BoardingPass is ERC721, Ownable{
     //=========================
     function ethToWei(uint256 ethPrice) internal pure returns(uint256){
         return ethPrice**18;
-    }
-    
+    }    
     //=========================
     
-    function mint(address _to, string memory _tokenURI, uint256 price) public virtual payable{
+    function mint(string memory _tokenURI, uint256 price) public virtual payable{
         require(msg.value >= ethToWei(price), "Not enough Ether");
         _tokenIdCounter.increment();
-        _safeMint(_to, _tokenIdCounter.current());
+        _safeMint(msg.sender, _tokenIdCounter.current());
         _setTokenURI(_tokenIdCounter.current(), _tokenURI);
         _tokenHolders[msg.sender].push(_tokenIdCounter.current());
     }
@@ -54,5 +53,5 @@ contract BoardingPass is ERC721, Ownable{
     
     function getAllTokensFromAdress(address _from) public view returns(uint256[] memory){
         return _tokenHolders[_from];
-    }
+    }    
 }
