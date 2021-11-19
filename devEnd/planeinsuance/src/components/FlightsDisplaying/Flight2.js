@@ -1,6 +1,6 @@
 import React from 'react'
 import './Flight.css'
-function Flight2({flightData}){
+const  Flight2 = ({flightData}) => {
     return (
         <div className="container-flight">
         <div id="infos" className="sub-container">

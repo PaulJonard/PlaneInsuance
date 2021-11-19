@@ -26,10 +26,9 @@ const Flight = ({flightData}) => {
     const mintNft = async () =>{
         try{
             const boardingPassContract = getContract();
-            console.log(boardingPassContract)
             let CID = pinJSONToIPFS(flightData);
-            let txn = await boardingPassContract.mint(CID, /*flightData.ethPrice*/)
-            console.log(txn.hash)
+            let txn = await boardingPassContract.mint(CID, flightData.ethPrice)
+            console.log(CID)
         } catch (error){
             console.log(error)
         }
