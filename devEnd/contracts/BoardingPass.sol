@@ -10,6 +10,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "hardhat/console.sol";
 
+import "./libraries/Base64.sol";
+
 contract BoardingPass is ERC721, Ownable{
  
     using Counters for Counters.Counter;
@@ -34,7 +36,7 @@ contract BoardingPass is ERC721, Ownable{
     //=========================
     
     function mint(string memory _tokenURI, uint256 price) public virtual payable{
-        require(msg.value >= ethToWei(price), "Not enough Ether");
+        require(msg.value >= price, "Not enough Ether");
         _tokenIdCounter.increment();
         _safeMint(msg.sender, _tokenIdCounter.current());
         _setTokenURI(_tokenIdCounter.current(), _tokenURI);
@@ -54,4 +56,27 @@ contract BoardingPass is ERC721, Ownable{
     function getAllTokensFromAdress(address _from) public view returns(uint256[] memory){
         return _tokenHolders[_from];
     }    
+
+    function tokenURI(uint256 _tokenId) public view override returns (string memory){
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name": "',
+                        "BoardingPass",
+                        ' -- NFT #: ',
+                        Strings.toString(_tokenId),
+                        '", "description": "Une collection qui represente des billets davion","image": "',
+                        "https://images.emojiterra.com/google/android-11/512px/2708.png",
+                        '", "attributes": [',_uris[_tokenId],']}'
+                    )
+                )
+            )
+        );
+
+        string memory output = string(
+            abi.encodePacked("data:application/json;base64,",json)
+        );
+        return output;
+    }
 }

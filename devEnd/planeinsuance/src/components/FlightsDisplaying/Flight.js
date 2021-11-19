@@ -1,18 +1,38 @@
 import React from 'react'
 import './Flight.css'
 import {pinJSONToIPFS} from './../../utils/IPFS.js'
+import abi from './../../utils/BoardingPass.json'
+import { ethers } from "ethers";
 
 const Flight = ({flightData}) => {
+    
+    const getContract = () => {
+        try{
+          const contractAddress = "0x7F7253Db09175ab15Dea4536D2a8Ddf083BD9719";
+          const contractABI = abi.abi;
+          const { ethereum } = window;
+          if(ethereum){
+            const provider = new ethers.providers.Web3Provider(ethereum);
+            const signer = provider.getSigner();
+            return new ethers.Contract(contractAddress, contractABI, signer);
+          } else{
+            console.log("Ethereum object doesn't exist!")
+          }
+        } catch(error){
+            console.log(error)
+        }
+    }
 
     const mintNft = async () =>{
-
-        const contractFactory = await hre.ethers.getContractFactory("BoardingPass");
-        const contract = await contractFactory.attach("0xc9D95273339ECEBD3E04D9a473C7abb1FBC7B35E");
-
-        let CID = pinJSONToIPFS(flightData);
-        let txn;
-        txn = await contract.mint(CID, flightData.ethPrice)
-        await txn.wait();
+        try{
+            const boardingPassContract = getContract();
+            console.log(boardingPassContract)
+            let CID = pinJSONToIPFS(flightData);
+            let txn = await boardingPassContract.mint(CID, /*flightData.ethPrice*/)
+            console.log(txn.hash)
+        } catch (error){
+            console.log(error)
+        }
     }
 
     return (
