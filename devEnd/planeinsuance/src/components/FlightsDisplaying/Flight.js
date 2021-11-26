@@ -1,14 +1,17 @@
 import React from 'react'
 import './Flight.css'
 import {pinJSONToIPFS} from './../../utils/IPFS.js'
+import {ethToWei} from './../../utils/EtherUtil.js'
 import abi from './../../utils/BoardingPass.json'
 import { ethers } from "ethers";
 
 const Flight = ({flightData}) => {
     
+    const baseURI = "https://gateway.pinata.cloud/ipfs/"
+
     const getContract = () => {
         try{
-          const contractAddress = "0x7F7253Db09175ab15Dea4536D2a8Ddf083BD9719";
+          const contractAddress = "0x3FF244111102bE6D759f86Ed0F888ddea765C70A";
           const contractABI = abi.abi;
           const { ethereum } = window;
           if(ethereum){
@@ -27,8 +30,8 @@ const Flight = ({flightData}) => {
         try{
             const boardingPassContract = getContract();
             let CID = pinJSONToIPFS(flightData);
-            let txn = await boardingPassContract.mint(CID, flightData.ethPrice)
-            console.log(CID)
+            let txn = await boardingPassContract.mint(baseURI + CID, ethToWei(flightData.ethPrice).toString())
+            console.log(txn)
         } catch (error){
             console.log(error)
         }

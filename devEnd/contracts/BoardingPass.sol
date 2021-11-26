@@ -24,8 +24,6 @@ contract BoardingPass is ERC721, Ownable{
     //URIs mapping  tokenId to uri datas
     mapping(uint => string) private _uris;
 
-    string private _baseURIextended = "https://gateway.pinata.cloud/ipfs/";
-
     constructor() ERC721("PlaneHub Token", "PHT"){}
     
     
@@ -45,8 +43,10 @@ contract BoardingPass is ERC721, Ownable{
     
     function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual
     {
+        console.log("Before tokenURI require");
         require(_exists(tokenId), "ERC721Metadata : URI set of nonexistent token");
-        _uris[tokenId] = string(abi.encodePacked(_baseURIextended, _tokenURI));
+        console.log("After tokenURI require");
+        _uris[tokenId] = _tokenURI;
     }
     
     function getTokenURI(uint256 tokenId) public view returns (string memory){

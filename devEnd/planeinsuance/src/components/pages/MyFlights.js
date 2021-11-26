@@ -10,7 +10,7 @@ class MyFlights extends Component{
   }
   async getContract(){
     try{
-      const contractAddress = "0x7F7253Db09175ab15Dea4536D2a8Ddf083BD9719";
+      const contractAddress = "0xA237D2692AD62Dd7ca74913e8A463AF6dBc9166b";
       const contractABI = abi.abi;
       const { ethereum } = window;
       if(ethereum){
@@ -21,7 +21,7 @@ class MyFlights extends Component{
         console.log("Ethereum object doesn't exist!")
       }
     } catch(error){
-        console.log(error)
+      console.log(error)
     }
   }  
 
