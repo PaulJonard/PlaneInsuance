@@ -33,18 +33,14 @@ contract BoardingPass is ERC721, Ownable{
     Counters.Counter private _tokenIdCounter;
     
     //Mapping address to mapping of Attributes
-    mapping(address => mapping(uint256 => BoardingPassAttributes)) private _tokenHolders;
+    mapping(address => uint256[]) private _tokenHolders;
+    mapping(uint256 => BoardingPassAttributes) private _attributes;
 
     constructor() ERC721("PlaneHub Token", "PHT"){
         priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
-    }
-    
+    }    
     
     //=========================
-    function ethToWei(uint256 ethPrice) internal pure returns(uint256){
-        return ethPrice**18;
-    }    
-
     function getBalance() public view returns(uint256){
         return address(this).balance;
     }
@@ -65,7 +61,9 @@ contract BoardingPass is ERC721, Ownable{
     function mint(string memory _num, string memory _departure, string memory _destination, string memory _boardingDate, string memory _boardingTime, bool _canceled, uint _price, uint ethPrice) public virtual payable{
         require(msg.value >= ethPrice, "Not enough Ether");
         _tokenIdCounter.increment();
-        _safeMint(msg.sender, _tokenIdCounter.current());
+        uint256 actualIdCounter = _tokenIdCounter.current();
+        
+        _safeMint(msg.sender, actualIdCounter);
 
         BoardingPassAttributes memory bpa = BoardingPassAttributes({
             num: _num,
@@ -77,37 +75,44 @@ contract BoardingPass is ERC721, Ownable{
             price : _price
         });
 
-        _tokenHolders[msg.sender][_tokenIdCounter.current()] = bpa;
+        _tokenHolders[msg.sender].push(actualIdCounter);
+        _attributes[actualIdCounter] = bpa;
     }
 
-    function refund(address payable _wallet, uint256 _tokenId) public payable {
+    function refund(address payable _wallet, uint256 _tokenId) public {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
-        uint256 dollarPrice = _tokenHolders[msg.sender][_tokenId].price;
+        uint256 dollarPrice = _attributes[_tokenId].price;
 
-        require(address(this).balance > dollarPrice / getLatestEthPrice()**8);
+        require(getLatestEthPrice() > 0, "not retrieve");
+        uint256 toSendQty = (dollarPrice**8 / getLatestEthPrice())**18;
+        require(toSendQty > 0, "eth quantity to send not retrieve from chainlink");
+        require(address(this).balance > toSendQty);
+
         //burned
         _burn(_tokenId);
         //Delete
-        delete _tokenHolders[msg.sender][_tokenId];
+        delete _tokenHolders[msg.sender][_tokenId-1];
+        delete _attributes[_tokenId];
         //Refund
-        (bool sent, bytes memory data) = _wallet.call{value: dollarPrice / getLatestEthPrice()**8}("");
+        (bool sent, bytes memory data) = _wallet.call{value: toSendQty}("");
         require(sent, "Failed to send Ether");
     }
     
-    //function getAllTokensFromAdress(address _from) public view returns(uint256[] memory){
-    //    return _tokenHolders[_from].keys;
-    //}    
+    function getAllTokensFromAdress() public view returns(uint256[] memory){
+        return _tokenHolders[msg.sender];
+    }    
 
     function updateTokenCanceledValue(uint256 _tokenId, bool _isCanceled) public {
-        _tokenHolders[msg.sender][_tokenId].canceled = _isCanceled;
+        require(msg.sender == ownerOf(_tokenId), "Not your token!");
+        _attributes[_tokenId].canceled = _isCanceled;
     }
 
     function getTokenCanceledValue(uint256 _tokenId) public view returns(bool){
-        return _tokenHolders[msg.sender][_tokenId].canceled;
+        return _attributes[_tokenId].canceled;
     }
 
     function tokenURI(uint256 _tokenId) public view override returns (string memory){
-        BoardingPassAttributes memory boardingPassAttributes = _tokenHolders[msg.sender][_tokenId];
+        BoardingPassAttributes memory boardingPassAttributes = _attributes[_tokenId];
         
         string memory isCanceled = Strings.toString(boardingPassAttributes.canceled ? 1 : 0);
         string memory price = Strings.toString(boardingPassAttributes.price);
