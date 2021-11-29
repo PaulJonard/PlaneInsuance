@@ -1,8 +1,9 @@
 const main = async () => {
-    const planeContractFactory = await hre.ethers.getContractFactory('BoardingPass');
-    const planeContract = await planeContractFactory.deploy();
-    await planeContract.deployed();
-    console.log("Contract deployed to:", planeContract.address);
+    const contractFactory = await hre.ethers.getContractFactory('BoardingPass');
+    const plane = await contractFactory.deploy();
+    await plane.deployed();
+
+    console.log("Contract deployed to:", plane.address);
   };
   
   const runMain = async () => {
