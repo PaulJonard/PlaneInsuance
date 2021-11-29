@@ -82,21 +82,23 @@ contract BoardingPass is ERC721, Ownable{
     function refund(address payable _wallet, uint256 _tokenId) public {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
         uint256 dollarPrice = _attributes[_tokenId].price;
+        uint256 ethPrice = getLatestEthPrice();
 
-        require(getLatestEthPrice() > 0, "not retrieve");
-        uint256 toSendQty = (dollarPrice**8 / getLatestEthPrice())**18;
-        require(toSendQty > 0, "eth quantity to send not retrieve from chainlink");
-        require(address(this).balance > toSendQty);
+        require(ethPrice > 0, "Ether price hasn\'t been retrieve yet from Chainlink");
+        uint256 toSendQty = (dollarPrice**8 / ethPrice)**18;
+        
+        require(address(this).balance > toSendQty, "Contract\'s balance hasn\'t enough Ether");
 
-        //burned
+        //burn
         _burn(_tokenId);
-        //Delete
+        //Delete     
         delete _tokenHolders[msg.sender][_tokenId-1];
         delete _attributes[_tokenId];
         //Refund
         (bool sent, bytes memory data) = _wallet.call{value: toSendQty}("");
         require(sent, "Failed to send Ether");
     }
+   
     
     function getAllTokensFromAdress() public view returns(uint256[] memory){
         return _tokenHolders[msg.sender];
