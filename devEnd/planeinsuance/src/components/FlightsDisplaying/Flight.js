@@ -1,7 +1,6 @@
 import React from 'react'
 import './Flight.css'
-import { getContract, ethToWei } from '../../utils/EtherUtil'
-
+import { getContract, ethToWei} from './../../utils/EtherUtil.js'
 const Flight = ({flightData}) => {
 
     const mintNft = async () =>{
@@ -15,9 +14,10 @@ const Flight = ({flightData}) => {
                 flightData.boardingTime,
                 flightData.canceled,
                 flightData.price,
-                ethToWei(flightData.ethPrice),
+                ethToWei(flightData.ethPrice).toString(),
                 {value : ethToWei(flightData.ethPrice)}
-            );
+            )
+            
             console.log(txn)
         } catch (error){
             console.log(error)

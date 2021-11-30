@@ -1,16 +1,14 @@
 import React from 'react'
 import './Flight.css'
-import { getContract, ethToWei} from './../../utils/EtherUtil.js'
+import { getContract} from './../../utils/EtherUtil.js'
 
 const Flight2 = ({flightData}) => {
 
     const refund = async () =>{
         try{
             const boardingPassContract = getContract();
-            let txn = await boardingPassContract.refund(
-                flightData.tokenId,
-                {value : ethToWei(flightData.ethPrice)}
-            );
+            console.log(flightData.tokenId)
+            let txn = await boardingPassContract.refund(flightData.tokenId)
             console.log(txn)
         } catch (error){
             console.log(error)

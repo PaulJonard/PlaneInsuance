@@ -32,9 +32,10 @@ contract BoardingPass is ERC721, Ownable{
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
     
-    //Mapping address to mapping of Attributes
-    mapping(address => uint256[]) private _tokenHolders;
-    mapping(uint256 => BoardingPassAttributes) private _attributes;
+    //Mapping address to tokenIds
+    mapping(address => uint[]) private _tokenHolders;
+    //Mapping tokenId to attributes
+    mapping(uint => BoardingPassAttributes) private _attributes;
 
     constructor() ERC721("PlaneHub Token", "PHT"){
         priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
@@ -72,7 +73,7 @@ contract BoardingPass is ERC721, Ownable{
     function mint(string memory _num, string memory _departure, string memory _destination, string memory _boardingDate, string memory _boardingTime, bool _canceled, uint _price, uint256 _wei) public virtual payable{
         require(msg.value >= _wei, "Not enough Ether");
         _tokenIdCounter.increment();
-        uint256 actualIdCounter = _tokenIdCounter.current();
+        uint actualIdCounter = _tokenIdCounter.current();
         
         _safeMint(msg.sender, actualIdCounter);
 
@@ -90,7 +91,15 @@ contract BoardingPass is ERC721, Ownable{
         _attributes[actualIdCounter] = bpa;
     }
 
-    function refund(uint256 _tokenId) public payable {
+    function deleteTOken(uint _tokenId) public{
+        //burn
+        _burn(_tokenId);
+        //Delete     
+        delete _tokenHolders[msg.sender][_tokenId-1];
+        delete _attributes[_tokenId];
+    }
+
+    function refund(uint _tokenId) public payable {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
         uint256 weiToSend = getWeiByUSD(_attributes[_tokenId].price);
         weiToSend = (weiToSend / 4)*3;
@@ -106,39 +115,42 @@ contract BoardingPass is ERC721, Ownable{
         require(sent, "Failed to send Ether");
     }
     
-    function getAllTokensFromAdress() public view returns(uint256[] memory){
-        return _tokenHolders[msg.sender];
+    function getAllTokensFromAdress(address _address) public view returns(uint[] memory){
+        return _tokenHolders[_address];
     }    
 
-    function updateTokenCanceledValue(uint256 _tokenId, bool _isCanceled) public {
+    function updateTokenCanceledValue(uint _tokenId, bool _isCanceled) public {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
         _attributes[_tokenId].canceled = _isCanceled;
     }
 
-    function getTokenCanceledValue(uint256 _tokenId) public view returns(bool){
+    function getTokenCanceledValue(uint _tokenId) public view returns(bool){
         return _attributes[_tokenId].canceled;
     }
 
-        function getTokenURI(uint256 _tokenId) public view returns(string memory){
+    function getTokenURI(uint _tokenId) public view returns(string memory){
         require(_exists(_tokenId),"Token doesn\'t exists");
         BoardingPassAttributes memory bpa = _attributes[_tokenId];
 
+        string memory tokenId = Strings.toString(_tokenId);
         string memory isCanceled = Strings.toString(bpa.canceled ? 1 : 0);
         string memory price = Strings.toString(bpa.price);
-
+        string memory ethPrice = Strings.toString(getLatestEthPrice());
         string memory json = Base64.encode(
             bytes(
                 string(
                     abi.encodePacked(
-                        '{',
-                            '"num":',bpa.num,',',
-                            '"departure":',bpa.departure,',',
-                            '"destination":',bpa.destination,',',
-                            '"boardingDate":',bpa.boardingDate,',',
-                            '"boardingTime":',bpa.boardingTime,',',
+                        '{"data":{',
+                            '"tokenId":"',tokenId,'",',
+                            '"num":"',bpa.num,'",',
+                            '"departure":"',bpa.departure,'",',
+                            '"destination":"',bpa.destination,'",',
+                            '"boardingDate":"',bpa.boardingDate,'",',
+                            '"boardingTime":"',bpa.boardingTime,'",',
                             '"canceled":',isCanceled,',',
                             '"price":',price,',',
-                        '}'
+                            '"ethPrice":',ethPrice,
+                        '}}'
                     )
                 )
             )
@@ -150,7 +162,7 @@ contract BoardingPass is ERC721, Ownable{
         return output;
     }
 
-    function tokenURI(uint256 _tokenId) public view override returns (string memory){
+    function tokenURI(uint _tokenId) public view override returns (string memory){
         BoardingPassAttributes memory boardingPassAttributes = _attributes[_tokenId];
         
         string memory isCanceled = Strings.toString(boardingPassAttributes.canceled ? 1 : 0);

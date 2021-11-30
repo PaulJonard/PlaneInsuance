@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { NavLink} from "react-router-dom";
 import "./NavBar.css";
@@ -5,18 +6,21 @@ import "./NavBar.css";
 const NavBar = () => {
   const [currentAccount, setCurrentAccount] = useState("");
   const click = useState(false);
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   
   const connectWallet = async () => {
-    try{
-      const { ethereum} = window
-      if(!ethereum){
+    try{      
+      if(provider !== null){
+        await provider.send("eth_requestAccounts", []);
+        const signer = await provider.getSigner();
+        console.log(signer);
+        console.log("Connected", await signer.getAddress());
+        setCurrentAccount(await signer.getAddress());
+      }else{
         alert("Get Metamask!")
         return;
       } 
-      const accounts = await ethereum.request({method: "eth_requestAccounts"});
-      
-      console.log("Connected", accounts[0]);
-      setCurrentAccount(accounts[0]);
+
     } catch(error){
       console.log(error);
     }
@@ -24,22 +28,11 @@ const NavBar = () => {
 
   const checkIfWalletIsConnected = async () => {
     try {      
-      const { ethereum} = window
-      if (!ethereum) {
-        console.log("Make sure you have metamask!");        
-        return;
+      console.log(provider)
+      if (provider !== null) {
+        connectWallet();         
       } else {
-        console.log("We have the ethereum object", ethereum);
-      }
-
-      const accounts = await ethereum.request({ method: 'eth_accounts' });
-
-      if (accounts.length !== 0) {
-        const account = accounts[0];
-        console.log("Found an authorized account:", account);
-        setCurrentAccount(account);
-      } else {
-        console.log("No authorized account found")
+        console.log("Make sure you have metamask!");
       }
     } catch (error) {
       console.log(error);

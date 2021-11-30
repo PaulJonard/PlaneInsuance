@@ -7,7 +7,7 @@ export const ethToWei = (ethPrice) => {
 
 export const getContract = () => {
     try{
-      const contractAddress = "0x381b8e3CEBe7FbC20517fe46810435574D29eB14";
+      const contractAddress = "0x3e8b054a1929b318de2417070E9F12e7AeCc55c9";
       const contractABI = abi.abi;
       const { ethereum } = window;
       if(ethereum){
