@@ -1,7 +1,22 @@
 import React from 'react'
 import './Flight.css'
+import { getContract, ethToWei} from './../../utils/EtherUtil.js'
 
 const Flight2 = ({flightData}) => {
+
+    const refund = async () =>{
+        try{
+            const boardingPassContract = getContract();
+            let txn = await boardingPassContract.refund(
+                flightData.tokenId,
+                {value : ethToWei(flightData.ethPrice)}
+            );
+            console.log(txn)
+        } catch (error){
+            console.log(error)
+        }
+    }
+
     return (
         <div className="container-flight">
             <div id="infos" className="sub-container">
@@ -17,7 +32,7 @@ const Flight2 = ({flightData}) => {
             <div id="buy" className="sub-container">
                 <div className="span-text">Prix : &emsp; {flightData.price} €</div>
                 <div className="span-text">{flightData.ethPrice} &nbsp; Ξ</div>
-                <button className="button-buy">Se faire Rembourser</button>
+                <button className="button-buy" onClick={refund}>Se faire Rembourser</button>
             </div>
         </div>
     )    

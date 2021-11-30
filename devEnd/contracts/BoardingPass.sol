@@ -56,10 +56,21 @@ contract BoardingPass is ERC721, Ownable{
         return uint256(price);
     }
 
+    function getWeiByUSD(uint256 usdPrice) public view returns(uint256){
+        uint256 ethPrice = getLatestEthPrice();
+
+        require(ethPrice > 0, "Ether price hasn\'t been retrieve yet from Chainlink");
+
+        uint256 weiToSend = (usdPrice**8 / ethPrice)**18;
+        
+        require(weiToSend > 0, "Problem in conversion inside contract");
+
+        return weiToSend;
+    }
     //=========================
     
-    function mint(string memory _num, string memory _departure, string memory _destination, string memory _boardingDate, string memory _boardingTime, bool _canceled, uint _price, uint ethPrice) public virtual payable{
-        require(msg.value >= ethPrice, "Not enough Ether");
+    function mint(string memory _num, string memory _departure, string memory _destination, string memory _boardingDate, string memory _boardingTime, bool _canceled, uint _price, uint256 _wei) public virtual payable{
+        require(msg.value >= _wei, "Not enough Ether");
         _tokenIdCounter.increment();
         uint256 actualIdCounter = _tokenIdCounter.current();
         
@@ -79,15 +90,11 @@ contract BoardingPass is ERC721, Ownable{
         _attributes[actualIdCounter] = bpa;
     }
 
-    function refund(address payable _wallet, uint256 _tokenId) public {
+    function refund(uint256 _tokenId) public payable {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
-        uint256 dollarPrice = _attributes[_tokenId].price;
-        uint256 ethPrice = getLatestEthPrice();
-
-        require(ethPrice > 0, "Ether price hasn\'t been retrieve yet from Chainlink");
-        uint256 toSendQty = (dollarPrice**8 / ethPrice)**18;
-        
-        require(address(this).balance > toSendQty, "Contract\'s balance hasn\'t enough Ether");
+        uint256 weiToSend = getWeiByUSD(_attributes[_tokenId].price);
+        weiToSend = (weiToSend / 4)*3;
+        require(address(this).balance > weiToSend, "Contract\'s balance hasn\'t enough Ether");
 
         //burn
         _burn(_tokenId);
@@ -95,10 +102,9 @@ contract BoardingPass is ERC721, Ownable{
         delete _tokenHolders[msg.sender][_tokenId-1];
         delete _attributes[_tokenId];
         //Refund
-        (bool sent, bytes memory data) = _wallet.call{value: toSendQty}("");
+        (bool sent, bytes memory data) = payable(msg.sender).call{value: weiToSend }("");
         require(sent, "Failed to send Ether");
     }
-   
     
     function getAllTokensFromAdress() public view returns(uint256[] memory){
         return _tokenHolders[msg.sender];
@@ -111,6 +117,37 @@ contract BoardingPass is ERC721, Ownable{
 
     function getTokenCanceledValue(uint256 _tokenId) public view returns(bool){
         return _attributes[_tokenId].canceled;
+    }
+
+        function getTokenURI(uint256 _tokenId) public view returns(string memory){
+        require(_exists(_tokenId),"Token doesn\'t exists");
+        BoardingPassAttributes memory bpa = _attributes[_tokenId];
+
+        string memory isCanceled = Strings.toString(bpa.canceled ? 1 : 0);
+        string memory price = Strings.toString(bpa.price);
+
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{',
+                            '"num":',bpa.num,',',
+                            '"departure":',bpa.departure,',',
+                            '"destination":',bpa.destination,',',
+                            '"boardingDate":',bpa.boardingDate,',',
+                            '"boardingTime":',bpa.boardingTime,',',
+                            '"canceled":',isCanceled,',',
+                            '"price":',price,',',
+                        '}'
+                    )
+                )
+            )
+        );  
+    
+        string memory output = string(
+            abi.encodePacked("data:application/json;base64,",json)
+        );
+        return output;
     }
 
     function tokenURI(uint256 _tokenId) public view override returns (string memory){
