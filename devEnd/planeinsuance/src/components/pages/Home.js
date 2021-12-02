@@ -91,19 +91,27 @@ const Home = () =>{
                 <div role="listitem" className="blog-preview-wrap">
                   <span className="business-article-heading">Réservez un vol !</span>
                   <p className="paragraphe-light">
-                    Bla bla bla A venir
+                    Connectez votre wallet! <br/>
+                    Rendez vous sur la page des vols disponible, 
+                    et acheter des maintenant votre billet de vol avec de l'Ethereum!<br/>
                   </p>
                 </div>
                 <div role="listitem" className="blog-preview-wrap">
                   <span className="business-article-heading">Un billet sous forme de NFT !</span>
                   <p className="paragraphe-light">
-                    Bla bla bla A venir
+                    Votre billet d'avion est un token!<br/>
+                    Vous et seulement vous, au travers de votre portefeuille, dispose de ce billet!<br/>
+                    Ses données sont visibles sur Rarible ou OpenSea!
                   </p>
                 </div>
                 <div role="listitem" className="blog-preview-wrap">
                   <span className="business-article-heading">Faites marcher l'assurance !</span>
                   <p className="paragraphe-light">
-                    Bla bla bla A venir
+                    Un problème avec votre vol?<br/>
+                    Annuler à cause du mauvais temps?<br/>
+                    Vous souhaitez surement un remboursement, alors faites marcher l'assurance!<br/>
+                    Rendez vous sur la page de vos vols, et demander votre remboursement dès maintenant!<br/>
+                    <i>remboursement à hauteur de 70% du prix d'achat USD de votre billet</i>
                   </p>
                 </div>
               </div>

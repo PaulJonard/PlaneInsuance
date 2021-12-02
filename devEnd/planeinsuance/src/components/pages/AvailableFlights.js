@@ -11,7 +11,7 @@ class AvailableFlights extends Component {
   }
   componentDidMount(){
     let ethPrice = 0
-    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=ethereum',
+    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum',
     {
       headers:
       {

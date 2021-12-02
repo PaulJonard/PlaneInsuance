@@ -37,7 +37,7 @@ const Flight = ({flightData}) => {
                 </div>
             </div>
             <div id="buy" className="sub-container">
-                <div className="span-text">Prix : &emsp; {flightData.price} €</div>
+                <div className="span-text">Prix : &emsp; {flightData.price} $</div>
                 <div className="span-text">{flightData.ethPrice} &nbsp; Ξ</div>
                 <button className="button-buy" onClick={mintNft}>Acheter</button>
             </div>
