@@ -90,3 +90,6 @@
     text-transform: uppercase;
     padding-bottom: 5px;
 }
+.button-buy:disabled{
+    opacity: 0.2;
+}

@@ -1,6 +1,6 @@
 import React from 'react'
 import './Flight.css'
-import { getContract, ethToWei} from './../../utils/EtherUtil.js'
+import { getContract, ethToWei } from './../../utils/EtherUtil.js'
 const Flight = ({flightData}) => {
 
     const mintNft = async () =>{
@@ -42,7 +42,7 @@ const Flight = ({flightData}) => {
                 <button className="button-buy" onClick={mintNft}>Acheter</button>
             </div>
         </div>
-    )    
-}    
+    )
+}
 
 export default Flight

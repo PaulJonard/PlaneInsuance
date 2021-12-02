@@ -83,8 +83,7 @@ const Home = () =>{
         <div className="section">
           <div className="container">
             <div className="blog-heading">
-              <div className="label cc-light">About Us</div>
-              <h2 className="work-heading">Company news</h2>
+              <div className="label cc-light">Débuter</div>
             </div>
             <div className="collection-list-wrapper">
               <div role="list" className="collection-wrap">

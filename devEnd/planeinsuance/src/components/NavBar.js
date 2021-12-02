@@ -83,7 +83,7 @@ const NavBar = () => {
             >
               Mes vols
             </NavLink>
-          </li>
+          </li>  
           <li className="nav-item">
             {!currentAccount ?               
               <button className="connectButton" onClick={connectWallet}>

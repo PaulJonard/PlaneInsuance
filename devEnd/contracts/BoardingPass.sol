@@ -91,16 +91,9 @@ contract BoardingPass is ERC721, Ownable{
         _attributes[actualIdCounter] = bpa;
     }
 
-    function deleteTOken(uint _tokenId) public{
-        //burn
-        _burn(_tokenId);
-        //Delete     
-        delete _tokenHolders[msg.sender][_tokenId-1];
-        delete _attributes[_tokenId];
-    }
-
     function refund(uint _tokenId) public payable {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
+        //require(_attributes[_tokenId].canceled == true, "This flight isn\'t canceled!!");
         uint256 weiToSend = getWeiByUSD(_attributes[_tokenId].price);
         weiToSend = (weiToSend / 4)*3;
         require(address(this).balance > weiToSend, "Contract\'s balance hasn\'t enough Ether");
@@ -111,7 +104,7 @@ contract BoardingPass is ERC721, Ownable{
         delete _tokenHolders[msg.sender][_tokenId-1];
         delete _attributes[_tokenId];
         //Refund
-        (bool sent, bytes memory data) = payable(msg.sender).call{value: weiToSend }("");
+        (bool sent, bytes memory data) = payable(msg.sender).call{value : weiToSend}("");
         require(sent, "Failed to send Ether");
     }
     
