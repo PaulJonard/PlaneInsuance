@@ -21,3 +21,13 @@ export const getContract = () => {
       console.log(error)
   }
 }
+
+export const updateFlightCanceledValue = (flightNum) => {
+  try{
+    const contractAddress = getContract();
+    contractAddress.updateAllTokensCanceledValueByNum(flightNum);
+
+  } catch(error){
+    console.log(error)
+  }
+}

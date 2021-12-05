@@ -12,7 +12,7 @@ const NavBar = () => {
     try{      
       if(provider !== null){
         await provider.send("eth_requestAccounts", []);
-        const signer = await provider.getSigner();
+        const signer = provider.getSigner();
         console.log(signer);
         console.log("Connected", await signer.getAddress());
         setCurrentAccount(await signer.getAddress());

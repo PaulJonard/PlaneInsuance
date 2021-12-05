@@ -1,8 +1,10 @@
 import React from 'react'
 import './Flight.css'
-import { getContract, ethToWei } from './../../utils/EtherUtil.js'
+import { getContract, ethToWei, updateFlightCanceledValue } from './../../utils/EtherUtil.js'
 const Flight = ({flightData}) => {
 
+    //Fonction qui définit les propriétés nécessaire à la methode du smart Contract pour mint
+    //Puis appelle cette dite méthode
     const mintNft = async () =>{
         try{
             const boardingPassContract = getContract();
@@ -22,6 +24,21 @@ const Flight = ({flightData}) => {
         } catch (error){
             console.log(error)
         }
+    }
+
+    //Met à jour à la fois dans la db et dans le contrat la valeur booléenne canceled d'un vol
+    const updateFlight = async() => {
+
+        fetch('http://localhost:8080/api/flights/:AX6015',
+        {
+          headers: 
+          { 
+            'Content-Type': 'application/text' 
+          },
+          method: 'PUT'
+        })
+
+        updateFlightCanceledValue(flightData.num)
     }
 
     return (

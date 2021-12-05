@@ -42,6 +42,12 @@ app.get("/api/flights/:num", (req, res) => {
     })
 })
 
+app.put("/api/flights/:num", (req,res) => {
+    var sql = "UPDATE Flight SET canceled = NOT(canceled) where num LIKE " +  "\'" + req.params.num.replace(":","") + "\'"
+    console.log(sql)
+    db.exec(sql)
+})
+
 //Default response for any other request
 app.use(function(req, res){
     res.header("Access-Control-Allow-Origin", "*");

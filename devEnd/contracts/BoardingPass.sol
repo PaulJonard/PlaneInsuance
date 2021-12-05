@@ -37,6 +37,9 @@ contract BoardingPass is ERC721, Ownable{
     //Mapping tokenId to attributes
     mapping(uint => BoardingPassAttributes) private _attributes;
 
+    //Mapping oneFlightNumber to tokenIds
+    mapping(string => uint[]) private _tokenIdFromNumber;
+
     constructor() ERC721("PlaneHub Token", "PHT"){
         priceFeed = AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
     }    
@@ -88,12 +91,13 @@ contract BoardingPass is ERC721, Ownable{
         });
 
         _tokenHolders[msg.sender].push(actualIdCounter);
+        _tokenIdFromNumber[_num].push(actualIdCounter);
         _attributes[actualIdCounter] = bpa;
     }
 
     function refund(uint _tokenId) public payable {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
-        //require(_attributes[_tokenId].canceled == true, "This flight isn\'t canceled!!");
+        require(_attributes[_tokenId].canceled == true, "This flight isn\'t canceled!!");
         uint256 weiToSend = getWeiByUSD(_attributes[_tokenId].price);
         weiToSend = (weiToSend / 4)*3;
         require(address(this).balance > weiToSend, "Contract\'s balance hasn\'t enough Ether");
@@ -102,19 +106,22 @@ contract BoardingPass is ERC721, Ownable{
         _burn(_tokenId);
         //Delete     
         delete _tokenHolders[msg.sender][_tokenId-1];
+        delete _tokenIdFromNumber[_attributes[_tokenId].num][_tokenId];
         delete _attributes[_tokenId];
         //Refund
         (bool sent, bytes memory data) = payable(msg.sender).call{value : weiToSend}("");
         require(sent, "Failed to send Ether");
     }
-    
+
     function getAllTokensFromAdress(address _address) public view returns(uint[] memory){
         return _tokenHolders[_address];
     }    
 
-    function updateTokenCanceledValue(uint _tokenId, bool _isCanceled) public {
-        require(msg.sender == ownerOf(_tokenId), "Not your token!");
-        _attributes[_tokenId].canceled = _isCanceled;
+    function updateAllTokensCanceledValueByNum(string memory _num) public{
+        uint[] memory tokenIds = _tokenIdFromNumber[_num];
+        for (uint i = 1; i <= tokenIds.length; i++ ){
+            _attributes[i].canceled = !_attributes[i].canceled;
+        }
     }
 
     function getTokenCanceledValue(uint _tokenId) public view returns(bool){
@@ -156,22 +163,47 @@ contract BoardingPass is ERC721, Ownable{
     }
 
     function tokenURI(uint _tokenId) public view override returns (string memory){
-        BoardingPassAttributes memory boardingPassAttributes = _attributes[_tokenId];
-        
-        string memory isCanceled = Strings.toString(boardingPassAttributes.canceled ? 1 : 0);
-        string memory price = Strings.toString(boardingPassAttributes.price);
+        BoardingPassAttributes memory bpa = _attributes[_tokenId];
 
         string memory json = Base64.encode(
             bytes(
                 string(
                     abi.encodePacked(
-                        '{"name": "',
-                        "BoardingPass",
-                        ' -- NFT #: ',
-                        Strings.toString(_tokenId),
-                        '", "description": "Une collection qui represente des billets d\'avion","image": "',
-                        "https://images.emojiterra.com/google/android-11/512px/2708.png",
-                        '", "attributes": [ { "trait_type": "Num", "value": ',boardingPassAttributes.num,'}, { "trait_type": "Departure", "value": ', boardingPassAttributes.departure,'}, { "trait_type": "Destination", "value": ', boardingPassAttributes.destination,'},  { "trait_type": "Boarding Date", "value": ', boardingPassAttributes.boardingDate,'},  { "trait_type": "Boarding Time", "value": ', boardingPassAttributes.boardingTime,'},  { "trait_type": "Canceled", "value": ', isCanceled,'},  { "trait_type": "USD Price", "value": ',price,'} ]}'
+                        '{',
+                        '"name": "BoardingPass",',
+                        '"-- NFT #": "',Strings.toString(_tokenId),'",',
+                        '"description": "Une collection qui represente des billets d avion",',
+                        '"image": "https://images.emojiterra.com/google/android-11/512px/2708.png",',
+                        '"attributes": [',
+                            '{',
+                                '"trait_type": "FlightNumber",', 
+                                '"value": "',bpa.num,'"', 
+                            '},',
+                            '{',
+                                '"trait_type": "Departure",', 
+                                '"value": "',bpa.departure,'"', 
+                            '},',
+                            '{',
+                                '"trait_type": "Destination",', 
+                                '"value": "',bpa.destination,'"', 
+                            '},',
+                            '{',
+                                '"trait_type": "BoardingDate",', 
+                                '"value": "',bpa.boardingDate,'"', 
+                            '},',
+                            '{',
+                                '"trait_type": "BoardingTime",', 
+                                '"value": "',bpa.boardingTime,'"', 
+                            '},',
+                            '{',
+                                '"trait_type": "IsCanceled",', 
+                                '"value": "',Strings.toString(bpa.canceled ? 1 : 0),'"', 
+                            '},',
+                            '{',
+                                '"trait_type": "Price",', 
+                                '"value": "',Strings.toString(bpa.price),'"', 
+                            '}'
+                        ']'
                     )
                 )
             )

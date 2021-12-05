@@ -24,7 +24,7 @@ class AvailableFlights extends Component {
     .then((result) => {
         ethPrice = result[0].current_price
 
-      fetch('http://localhost:8080/api/flights',
+      fetch('http://localhost:8080/api/flights/',
       {
         headers: 
         { 
@@ -35,6 +35,7 @@ class AvailableFlights extends Component {
         return response.json()
       })
       .then((result) => {
+        console.log(ethPrice)
         result.data.map(row => row.ethPrice = (row.price / ethPrice).toPrecision(2))
         this.setState(result)
       })
