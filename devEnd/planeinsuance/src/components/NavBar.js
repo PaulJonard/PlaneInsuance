@@ -8,13 +8,12 @@ const NavBar = () => {
   const click = useState(false);
   const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   
+  //Methode pour connecter le wallet, agit au click sur le bouton de connexion, et au lancem
   const connectWallet = async () => {
     try{      
       if(provider !== null){
         await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
-        console.log(signer);
-        console.log("Connected", await signer.getAddress());
         setCurrentAccount(await signer.getAddress());
       }else{
         alert("Get Metamask!")
@@ -28,7 +27,6 @@ const NavBar = () => {
 
   const checkIfWalletIsConnected = async () => {
     try {      
-      console.log(provider)
       if (provider !== null) {
         connectWallet();         
       } else {
@@ -39,6 +37,7 @@ const NavBar = () => {
     }
   }
 
+  //useEffect est une méthode du framework React, qui agit au chargement de la page
   useEffect(() => {
     checkIfWalletIsConnected();
   }, []);

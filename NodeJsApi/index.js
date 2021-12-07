@@ -17,7 +17,8 @@ app.listen(HTTP_PORT, () => {
 
 //ENDPOINTS
 app.get("/api/flights", (req, res) => {
-    var sql = "select * from Flight"
+    //Requete SQL exécuté via la méthode HTTP GET
+    var sql = "select * from Flight where canceled = false and boardingDate > STRFTIME('%d/%m/%Y',date('now'))"
     var params = []
     db.all(sql, params, (err, rows) => {
         
@@ -44,7 +45,6 @@ app.get("/api/flights/:num", (req, res) => {
 
 app.put("/api/flights/:num", (req,res) => {
     var sql = "UPDATE Flight SET canceled = NOT(canceled) where num LIKE " +  "\'" + req.params.num.replace(":","") + "\'"
-    console.log(sql)
     db.exec(sql)
 })
 

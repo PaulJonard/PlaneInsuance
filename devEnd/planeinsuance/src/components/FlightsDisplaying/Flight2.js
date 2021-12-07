@@ -1,15 +1,33 @@
 import React from 'react'
 import './Flight.css'
-import { getContract} from './../../utils/EtherUtil.js'
+import { getContract, ethToWei} from './../../utils/EtherUtil.js'
 
 const Flight2 = ({flightData}) => {
 
+    //Méthode de remboursement, fait appel à une API pour récupérer le prix actuel de l'ETH
     const refund = async () =>{
         try{
-            const boardingPassContract = getContract();
-            console.log(flightData.tokenId)
-            let txn = await boardingPassContract.refund(flightData.tokenId)
-            console.log(txn)
+            fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum',
+            {
+            headers:
+            {
+                'Content-Type': 'application/json'
+            }
+            })
+            .then((response) => {
+                return response.json()
+            })
+            .then((result) => {
+                let ethPrice = result[0].current_price;
+
+                const boardingPassContract = getContract();
+                if(flightData.canceled){
+                    //Fait les conversions pour emettre au contract, la valeur en wei de remboursement 
+                    boardingPassContract.refund(flightData.tokenId, ethToWei(((flightData.price/ethPrice)*0.75).toPrecision(3)))
+                }else{
+                    alert("Ce vol n'est pas annulé!")
+                }                       
+            });
         } catch (error){
             console.log(error)
         }
@@ -30,7 +48,7 @@ const Flight2 = ({flightData}) => {
             <div id="buy" className="sub-container">
                 <div className="span-text">Prix : &emsp; {flightData.price} $</div>
                 <div className="span-text">{flightData.ethPrice} &nbsp; Ξ</div>
-                <button className="button-buy" onClick={refund}>Se faire Rembourser</button>
+                <button className="button-buy" onClick={refund} disabled={flightData.canceled === 0 ? true : false}>Se faire Rembourser</button>
             </div>
         </div>
     )    

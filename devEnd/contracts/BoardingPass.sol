@@ -9,7 +9,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
-
 import "hardhat/console.sol";
 
 import "./libraries/Base64.sol";
@@ -59,18 +58,6 @@ contract BoardingPass is ERC721, Ownable{
         ) = priceFeed.latestRoundData();
         return uint256(price);
     }
-
-    function getWeiByUSD(uint256 usdPrice) public view returns(uint256){
-        uint256 ethPrice = getLatestEthPrice();
-
-        require(ethPrice > 0, "Ether price hasn\'t been retrieve yet from Chainlink");
-
-        uint256 weiToSend = (usdPrice**8 / ethPrice)**18;
-        
-        require(weiToSend > 0, "Problem in conversion inside contract");
-
-        return weiToSend;
-    }
     //=========================
     
     function mint(string memory _num, string memory _departure, string memory _destination, string memory _boardingDate, string memory _boardingTime, bool _canceled, uint _price, uint256 _wei) public virtual payable{
@@ -95,18 +82,16 @@ contract BoardingPass is ERC721, Ownable{
         _attributes[actualIdCounter] = bpa;
     }
 
-    function refund(uint _tokenId) public payable {
+    function refund(uint _tokenId, uint weiToSend) public payable {
         require(msg.sender == ownerOf(_tokenId), "Not your token!");
         require(_attributes[_tokenId].canceled == true, "This flight isn\'t canceled!!");
-        uint256 weiToSend = getWeiByUSD(_attributes[_tokenId].price);
-        weiToSend = (weiToSend / 4)*3;
         require(address(this).balance > weiToSend, "Contract\'s balance hasn\'t enough Ether");
 
         //burn
         _burn(_tokenId);
         //Delete     
         delete _tokenHolders[msg.sender][_tokenId-1];
-        delete _tokenIdFromNumber[_attributes[_tokenId].num][_tokenId];
+        delete _tokenIdFromNumber[_attributes[_tokenId].num][_tokenId-1];
         delete _attributes[_tokenId];
         //Refund
         (bool sent, bytes memory data) = payable(msg.sender).call{value : weiToSend}("");

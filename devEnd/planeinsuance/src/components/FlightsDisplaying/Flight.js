@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState} from 'react'
 import './Flight.css'
-import { getContract, ethToWei, updateFlightCanceledValue } from './../../utils/EtherUtil.js'
+import { getContract, ethToWei, updateFlightCanceledValue, isOwner } from './../../utils/EtherUtil.js'
 const Flight = ({flightData}) => {
-
+    const [_isOwner, _setIsOwner] = useState(false);
     //Fonction qui définit les propriétés nécessaire à la methode du smart Contract pour mint
     //Puis appelle cette dite méthode
-    const mintNft = async () =>{
+    const mintNft = async () => {
         try{
+            isOwner().then((res) => {console.log(res)})
             const boardingPassContract = getContract();
-            let txn = await boardingPassContract.mint(
+            await boardingPassContract.mint(
                 flightData.num,
                 flightData.departure,
                 flightData.destination,
@@ -19,8 +20,8 @@ const Flight = ({flightData}) => {
                 ethToWei(flightData.ethPrice).toString(),
                 {value : ethToWei(flightData.ethPrice)}
             )
-            
-            console.log(txn)
+
+            window.location.reload(true);
         } catch (error){
             console.log(error)
         }
@@ -29,7 +30,7 @@ const Flight = ({flightData}) => {
     //Met à jour à la fois dans la db et dans le contrat la valeur booléenne canceled d'un vol
     const updateFlight = async() => {
 
-        fetch('http://localhost:8080/api/flights/:AX6015',
+        fetch('http://localhost:8080/api/flights/:'+ flightData.num,
         {
           headers: 
           { 
@@ -39,8 +40,12 @@ const Flight = ({flightData}) => {
         })
 
         updateFlightCanceledValue(flightData.num)
+        window.location.reload(true);
     }
 
+    useEffect(async() => {
+        _setIsOwner(await isOwner())
+    }, [])
     return (
         <div className="container-flight">
             <div id="infos" className="sub-container">
@@ -56,7 +61,8 @@ const Flight = ({flightData}) => {
             <div id="buy" className="sub-container">
                 <div className="span-text">Prix : &emsp; {flightData.price} $</div>
                 <div className="span-text">{flightData.ethPrice} &nbsp; Ξ</div>
-                <button className="button-buy" onClick={mintNft}>Acheter</button>
+                <button className="button-buy" onClick={mintNft} hidden={_isOwner}>Acheter</button>
+                <button className="button-buy" onClick={updateFlight} hidden={!_isOwner}>Annuler un vol</button>
             </div>
         </div>
     )

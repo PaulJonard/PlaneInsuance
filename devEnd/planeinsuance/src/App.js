@@ -5,6 +5,8 @@ import Home  from './components/pages/Home';
 import AvailableFlights from './components/pages/AvailableFlights';
 import MyFlights from './components/pages/MyFlights';
 
+//Point d'entrée de l'application
+//Composant Router, incluant la navbar et les page à router
 function App() {
     return (
     <>

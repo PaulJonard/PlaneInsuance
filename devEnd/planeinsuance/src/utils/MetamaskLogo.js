@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ModelViewer from 'metamask-logo';
 
+//Composant qui permets d'inclure dans le site web, le package exposant le logo Metamask
 class MetamaskLogo extends Component {
   componentDidMount() {
     this.viewer = ModelViewer({
