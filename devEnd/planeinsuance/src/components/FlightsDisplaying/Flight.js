@@ -40,11 +40,13 @@ const Flight = ({flightData}) => {
         })
 
         updateFlightCanceledValue(flightData.num)
-        window.location.reload(true);
+        //window.location.reload(true);  buggé
     }
-
-    useEffect(async() => {
-        _setIsOwner(await isOwner())
+    useEffect(() => {
+        async function sets() {
+            _setIsOwner(await isOwner())
+        }
+        sets();
     }, [])
     return (
         <div className="container-flight">
