@@ -11,7 +11,7 @@ export const ethToWei = (ethPrice) => {
 export const getContract = () => {
   try{
     //L'addresse du contrat, renvoyé au moment du deploiment par hardhat
-    const contractAddress = "0x281777246Ffe8D7081D9A9934481bCa0b06B2c49";
+    const contractAddress = "0xe6852D6D4D8eDD6b674794ba85372Abe15Fd2356";
 
     //Fichier construit dans artifacts/contracts/BoardingPass
     //Permets d'obtenir un bytecode du smartcontract, et d'exposer ses fonctions
@@ -50,8 +50,6 @@ export const isOwner = async() => {
 
       const signerAddress = await provider.getSigner().getAddress();
       const deployerAddress = await getContract().owner();
-      console.log(signerAddress)
-      console.log(deployerAddress)
       return  signerAddress === deployerAddress ? true : false
   } catch(error){
       console.log(error)
